@@ -15,17 +15,17 @@ fi
 
 #Connect to VPNs
 clear
-echo "Connect to a VPN?"
-echo "1: VPN-Home"
-echo "2: VPN-Cloud"
-read vpnchoice
+vpnchoice=$(whiptail --menu "Choose VPN to connect to:" 15 80 4 \
+			"VPN-Home" "|  VPN server that allows access to the home network" \
+			"VPN-Cloud" "|  VPN Server in the cloud with PiHole setup" 3>&1 1>&2 2>&3)
 
-if [ $vpnchoice = "1" ]; then
-	systemctl start wg-quick@VPN-Home.service
-	echo "VPN-Home Connected"
-
-elif [ $vpnchoice = "2" ]; then
-	systemctl start wg-quick@VPN-Cloud.service
-	echo "VPN-Cloud Connected"
-	exit
-fi
+case $vpnchoice in 
+	VPN-Home)
+		systemctl start wg-quick@VPN-Home.service
+		echo "VPN-Home Connected"
+	;;
+	VPN-Cloud)
+		systemctl start wg-quick@VPN-Cloud.service
+		echo "VPN-Cloud Connected"
+	;;
+esac
